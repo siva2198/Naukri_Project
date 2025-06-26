@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="NaukriSingleSessionSuite" preserve-order="true">
+    
+    <listeners>
+        <listener class-name="listeners.TestListener"/>
+    </listeners>
+    
+    <test name="SingleSessionTests" preserve-order="true">
+        <classes>
+            <class name="base.SingleSessionSuiteManager"/>
+            <class name="tests.SingleSessionLoginTest"/>
+            <class name="tests.SingleSessionHomePageTest"/>
+        </classes>
+    </test>
+    
+</suite>
