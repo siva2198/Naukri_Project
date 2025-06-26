@@ -1,0 +1,4 @@
+# This is a placeholder for Excel test data file
+# Create an Excel file with the following structure:
+# Sheet: LoginData
+# Columns: email, password, expected_result, test_description
