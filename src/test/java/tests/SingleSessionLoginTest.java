@@ -11,6 +11,8 @@ import utils.ScreenshotManager;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
 
 /**
  * Login validation tests for single session execution with Allure reporting
@@ -89,17 +91,8 @@ public class SingleSessionLoginTest extends SingleSessionBaseTest {
         String actualMessage = profilePage.getMessage();
         String expectedMessage = "GreenTick\nSuccess\nResume Headline has been successfully saved.";
         
-        // Take screenshot for Allure report with proper exception handling
-        String screenshotPath = ScreenshotManager.takeScreenshot("resume_headline_success");
-        if (screenshotPath != null) {
-            try {
-                byte[] screenshotBytes = Files.readAllBytes(Paths.get(screenshotPath));
-                Allure.addAttachment("Resume Headline Update Success", "image/png", screenshotBytes);
-            } catch (IOException e) {
-                System.err.println("Failed to attach screenshot to Allure report: " + e.getMessage());
-                Allure.step("Screenshot attachment failed: " + e.getMessage());
-            }
-        }
+        // Take screenshot and attach to Allure report using correct method signature
+        attachScreenshotToAllure("resume_headline_success", "Resume Headline Update Success");
         
         System.out.println("Expected: " + expectedMessage);
         System.out.println("Actual: " + actualMessage);
@@ -138,19 +131,33 @@ public class SingleSessionLoginTest extends SingleSessionBaseTest {
         String uploadMessage = profilePage.getMessage();
         System.out.println("Upload message: " + uploadMessage);
         
-        // Take screenshot for Allure report with proper exception handling
-        String screenshotPath = ScreenshotManager.takeScreenshot("resume_upload_result");
+        // Take screenshot and attach to Allure report using correct method signature
+        attachScreenshotToAllure("resume_upload_result", "Resume Upload Result");
+        
+        Allure.step("Resume upload process completed");
+        System.out.println("✅ Test 4: Resume upload process verified");
+    }
+
+    /**
+     * Helper method to attach screenshots to Allure report with proper error handling
+     * @param screenshotName Name for the screenshot file
+     * @param attachmentName Name for the Allure attachment
+     */
+    private void attachScreenshotToAllure(String screenshotName, String attachmentName) {
+        String screenshotPath = ScreenshotManager.takeScreenshot(screenshotName);
         if (screenshotPath != null) {
             try {
-                byte[] screenshotBytes = Files.readAllBytes(Paths.get(screenshotPath));
-                Allure.addAttachment("Resume Upload Result", "image/png", screenshotBytes);
+                Path path = Paths.get(screenshotPath);
+                try (InputStream inputStream = Files.newInputStream(path)) {
+                    Allure.addAttachment(attachmentName, "image/png", inputStream, "png");
+                }
+                Allure.step("Screenshot attached successfully: " + attachmentName);
             } catch (IOException e) {
                 System.err.println("Failed to attach screenshot to Allure report: " + e.getMessage());
                 Allure.step("Screenshot attachment failed: " + e.getMessage());
             }
+        } else {
+            Allure.step("Screenshot could not be taken for: " + attachmentName);
         }
-        
-        Allure.step("Resume upload process completed");
-        System.out.println("✅ Test 4: Resume upload process verified");
     }
 }
