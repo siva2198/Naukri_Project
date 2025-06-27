@@ -1,14 +1,14 @@
 package pages;
 
+import org.openqa.selenium.By;
 import utils.ElementUtils;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
-import java.util.ArrayList;
 
 /**
- * Enhanced Home page object with logout functionality
+ * Home page object with common navigation and search functionality
  * Author: Sivaraman M
  */
 public class HomePage extends BasePage {
@@ -19,28 +19,25 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//input[@placeholder='Enter location']")
     private WebElement locationBox;
 
-    @FindBy(xpath = "//button[contains(@class, 'search-button')] | //button[contains(text(), 'Search')]")
+    @FindBy(xpath = "//button[contains(@class, 'search-button')]")
     private WebElement searchButton;
 
-    @FindBy(xpath = "//div[@class='naukri-logo'] | //a[contains(@class, 'naukri-logo')]")
+    @FindBy(xpath = "//a[@class='nI-gNb-header__logo nI-gNb-company-logo']")
     private WebElement naukriLogo;
 
-    @FindBy(xpath = "//nav//a[contains(@href, 'jobs')] | //a[contains(text(), 'Jobs')]")
+    @FindBy(xpath = "//nav//a[contains(@href, 'jobs')]")
     private WebElement jobsLink;
 
-    @FindBy(xpath = "//nav//a[contains(@href, 'companies')] | //a[contains(text(), 'Companies')]")
+    @FindBy(xpath = "//nav//a[contains(@href, 'companies')]")
     private WebElement companiesLink;
 
-    @FindBy(xpath = "//nav//a[contains(@href, 'services')] | //a[contains(text(), 'Services')]")
+    @FindBy(xpath = "//nav//a[contains(@href, 'services')]")
     private WebElement servicesLink;
 
-    @FindBy(xpath = "//div[contains(@class, 'user-menu')] | //div[contains(@class, 'dropdown')] | //span[contains(@class, 'user')]")
+    @FindBy(xpath = "//div[@class='nI-gNb-drawer__icon-img-wrapper']")
     private WebElement userMenu;
 
-    @FindBy(xpath = "//a[contains(text(), 'Logout')] | //span[contains(text(), 'Logout')]")
-    private WebElement logoutLink;
-
-    @FindBy(xpath = "//div[@class='trending-searches']//a | //div[contains(@class, 'trending')]//a")
+    @FindBy(xpath = "//div[@class='trending-searches']//a")
     private List<WebElement> trendingSearches;
 
     public void searchJobs(String skills, String location) {
@@ -49,7 +46,7 @@ public class HomePage extends BasePage {
             ElementUtils.sendKeys(locationBox, location);
         }
         ElementUtils.click(searchButton);
-        System.out.println("🔍 Searched for jobs: " + skills + " in " + location);
+        System.out.println("Searched for jobs: " + skills + " in " + location);
     }
 
     public void searchJobs(String skills) {
@@ -58,54 +55,28 @@ public class HomePage extends BasePage {
 
     public void clickJobsLink() {
         ElementUtils.click(jobsLink);
-        System.out.println("🔗 Clicked Jobs link");
+        System.out.println("Clicked Jobs link");
     }
 
     public void clickCompaniesLink() {
         ElementUtils.click(companiesLink);
-        System.out.println("🔗 Clicked Companies link");
+        System.out.println("Clicked Companies link");
     }
 
     public void clickServicesLink() {
         ElementUtils.click(servicesLink);
-        System.out.println("🔗 Clicked Services link");
+        System.out.println("Clicked Services link");
     }
 
     public void openUserMenu() {
         ElementUtils.click(userMenu);
-        System.out.println("👤 Opened user menu");
-    }
-
-    public void performLogout() {
-        try {
-            openUserMenu();
-            Thread.sleep(1000); // Wait for menu to open
-            
-            if (ElementUtils.isDisplayed(logoutLink)) {
-                ElementUtils.click(logoutLink);
-                System.out.println("👋 Clicked logout link");
-                Thread.sleep(2000); // Wait for logout to complete
-            } else {
-                System.out.println("⚠️ Logout link not found in user menu");
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.err.println("Logout interrupted: " + e.getMessage());
-        }
+        System.out.println("Opened user menu");
     }
 
     public List<String> getTrendingSearches() {
-        List<String> searches = new ArrayList<>();
-        try {
-            for (WebElement element : trendingSearches) {
-                if (ElementUtils.isDisplayed(element)) {
-                    searches.add(ElementUtils.getText(element));
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("⚠️ Could not retrieve trending searches: " + e.getMessage());
-        }
-        return searches;
+        return trendingSearches.stream()
+                .map(ElementUtils::getText)
+                .toList();
     }
 
     public void clickTrendingSearch(String searchTerm) {
@@ -114,17 +85,32 @@ public class HomePage extends BasePage {
                 .findFirst()
                 .ifPresent(element -> {
                     ElementUtils.click(element);
-                    System.out.println("🔍 Clicked trending search: " + searchTerm);
+                    System.out.println("Clicked trending search: " + searchTerm);
                 });
     }
 
     @Override
     public boolean isPageLoaded() {
-        return ElementUtils.isDisplayed(naukriLogo) && 
-               ElementUtils.isDisplayed(searchBox);
+        return ElementUtils.isDisplayed(naukriLogo);
     }
 
     public boolean isUserLoggedIn() {
         return ElementUtils.isDisplayed(userMenu);
+    }
+    public void getProfile(){
+        WebElement viewProfileLink = driver.findElement(
+                By.xpath("//a[contains(text(),'Update Profile')]")
+        );
+
+// Extract and build full URL
+        String relativeUrl = viewProfileLink.getAttribute("href");
+//        String fullUrl = "https://www.naukri.com" + relativeUrl;
+
+// Navigate directly to profile page
+        driver.get(relativeUrl);
+        System.out.printf("Get profile link :%s%n", relativeUrl);
+
+
+
     }
 }

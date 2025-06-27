@@ -13,8 +13,11 @@ public class ProfilePage extends BasePage {
     @FindBy(xpath = "//h1[contains(@class, 'profile-name')]")
     private WebElement profileName;
 
-    @FindBy(xpath = "//div[contains(@class, 'profile-headline')]")
-    private WebElement profileHeadline;
+    @FindBy(xpath = "//div[@class='widgetHead']//span[@class='edit icon'][normalize-space()='editOneTheme']")
+    private WebElement editProfileHeadlineButton;
+
+    @FindBy(xpath = "//button[normalize-space()='Save']")
+    private WebElement saveButtonHeadline;
 
     @FindBy(xpath = "//button[contains(@class, 'edit-profile')]")
     private WebElement editProfileButton;
@@ -25,7 +28,7 @@ public class ProfilePage extends BasePage {
     @FindBy(xpath = "//section[@class='resume-section']")
     private WebElement resumeSection;
 
-    @FindBy(xpath = "//button[contains(@class, 'upload-resume')]")
+    @FindBy(xpath = "//input[@value='Update resume']")
     private WebElement uploadResumeButton;
 
     @FindBy(xpath = "//div[@class='experience-section']")
@@ -37,18 +40,38 @@ public class ProfilePage extends BasePage {
     @FindBy(xpath = "//div[@class='skills-section']")
     private WebElement skillsSection;
 
+    @FindBy(xpath = "//div[@class='msgBox success ']")
+    private WebElement messageBoxSucessOrFailure;
+
+
     public String getProfileName() {
         ElementUtils.waitForElementToBeVisible(profileName);
         return ElementUtils.getText(profileName);
     }
 
     public String getProfileHeadline() {
-        return ElementUtils.getText(profileHeadline);
+        return ElementUtils.getText(editProfileHeadlineButton);
+    }
+    public void clickEditProfileHeadline(){
+        ElementUtils.click(editProfileHeadlineButton);
+        System.out.println("Clicked on resume headline");
     }
 
-    public void clickEditProfile() {
+    public void clickEditResumeHeadline() {
         ElementUtils.click(editProfileButton);
         System.out.println("Clicked edit profile button");
+    }
+
+    public void clickOnSaveEditResumeHeadline(){
+        ElementUtils.click(saveButtonHeadline);
+        System.out.println("Clicked on save Resume headline");
+    }
+
+    public String getMessage(){
+        if (ElementUtils.isDisplayed(messageBoxSucessOrFailure)){
+            return ElementUtils.getText(messageBoxSucessOrFailure);
+        }
+        return "0%";
     }
 
     public String getProfileCompletionPercentage() {
@@ -62,9 +85,11 @@ public class ProfilePage extends BasePage {
         return ElementUtils.isDisplayed(resumeSection);
     }
 
-    public void uploadResume() {
-        ElementUtils.click(uploadResumeButton);
+    public void uploadResumeClickAndUpload() {
+//        ElementUtils.click(uploadResumeButton);
         System.out.println("Clicked upload resume button");
+        ElementUtils.sendKeys(uploadResumeButton,System.getProperty("user.dir")+"/src/test/resources/testdata/QA_Engineer_Sivaraman M_June.pdf");
+        System.out.println("File uploaded");
     }
 
     public boolean hasExperience() {

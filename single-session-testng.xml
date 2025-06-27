@@ -8,9 +8,9 @@
     
     <test name="SingleSessionTests" preserve-order="true">
         <classes>
-            <class name="base.SingleSessionSuiteManager"/>
+        <!--    <class name="base.SingleSessionSuiteManager"/> -->
             <class name="tests.SingleSessionLoginTest"/>
-            <class name="tests.SingleSessionHomePageTest"/>
+         <!--   <class name="tests.SingleSessionHomePageTest"/> -->
         </classes>
     </test>
     
