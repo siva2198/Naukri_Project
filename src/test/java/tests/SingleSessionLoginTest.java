@@ -8,6 +8,10 @@ import org.testng.annotations.Test;
 import pages.ProfilePage;
 import utils.ScreenshotManager;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.io.IOException;
+
 /**
  * Login validation tests for single session execution with Allure reporting
  * Author: Sivaraman M
@@ -85,11 +89,16 @@ public class SingleSessionLoginTest extends SingleSessionBaseTest {
         String actualMessage = profilePage.getMessage();
         String expectedMessage = "GreenTick\nSuccess\nResume Headline has been successfully saved.";
         
-        // Take screenshot for Allure report
+        // Take screenshot for Allure report with proper exception handling
         String screenshotPath = ScreenshotManager.takeScreenshot("resume_headline_success");
         if (screenshotPath != null) {
-            Allure.addAttachment("Resume Headline Update Success", "image/png", 
-                java.nio.file.Files.readAllBytes(java.nio.file.Paths.get(screenshotPath)));
+            try {
+                byte[] screenshotBytes = Files.readAllBytes(Paths.get(screenshotPath));
+                Allure.addAttachment("Resume Headline Update Success", "image/png", screenshotBytes);
+            } catch (IOException e) {
+                System.err.println("Failed to attach screenshot to Allure report: " + e.getMessage());
+                Allure.step("Screenshot attachment failed: " + e.getMessage());
+            }
         }
         
         System.out.println("Expected: " + expectedMessage);
@@ -129,14 +138,15 @@ public class SingleSessionLoginTest extends SingleSessionBaseTest {
         String uploadMessage = profilePage.getMessage();
         System.out.println("Upload message: " + uploadMessage);
         
-        // Take screenshot for Allure report
+        // Take screenshot for Allure report with proper exception handling
         String screenshotPath = ScreenshotManager.takeScreenshot("resume_upload_result");
         if (screenshotPath != null) {
             try {
-                Allure.addAttachment("Resume Upload Result", "image/png", 
-                    java.nio.file.Files.readAllBytes(java.nio.file.Paths.get(screenshotPath)));
-            } catch (Exception e) {
-                System.err.println("Failed to attach screenshot: " + e.getMessage());
+                byte[] screenshotBytes = Files.readAllBytes(Paths.get(screenshotPath));
+                Allure.addAttachment("Resume Upload Result", "image/png", screenshotBytes);
+            } catch (IOException e) {
+                System.err.println("Failed to attach screenshot to Allure report: " + e.getMessage());
+                Allure.step("Screenshot attachment failed: " + e.getMessage());
             }
         }
         
