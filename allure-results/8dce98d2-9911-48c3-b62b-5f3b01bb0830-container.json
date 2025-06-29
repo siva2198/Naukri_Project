@@ -1,0 +1,35 @@
+{
+  "uuid": "8dce98d2-9911-48c3-b62b-5f3b01bb0830",
+  "name": "NaukriSingleSessionSuite",
+  "children": [
+    "0459290b-0839-4760-b1aa-7d4a0bc4a846"
+  ],
+  "befores": [
+    {
+      "name": "suiteSetup",
+      "status": "passed",
+      "stage": "finished",
+      "description": "",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1750941786999,
+      "stop": 1750941828473
+    }
+  ],
+  "afters": [
+    {
+      "name": "suiteTeardown",
+      "status": "passed",
+      "stage": "finished",
+      "description": "",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1750941835768,
+      "stop": 1750941840638
+    }
+  ],
+  "start": 1750941786963,
+  "stop": 1750941840638
+}
