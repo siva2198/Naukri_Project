@@ -3,7 +3,10 @@ package pages;
 import utils.ElementUtils;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.JavascriptExecutor;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 
 /**
  * Profile page object for managing user profile operations
@@ -29,8 +32,11 @@ public class ProfilePage extends BasePage {
     @FindBy(xpath = "//section[@class='resume-section']")
     private WebElement resumeSection;
 
+    @FindBy(xpath = "//input[@id='attachCV']")
+    private WebElement fileUploadInput;
+
     @FindBy(xpath = "//input[@value='Update resume']")
-    private WebElement uploadResumeButton;
+    private WebElement updateResumeButton;
 
     @FindBy(xpath = "//div[@class='experience-section']")
     private WebElement experienceSection;
@@ -87,34 +93,45 @@ public class ProfilePage extends BasePage {
     }
 
     public void uploadResumeClickAndUpload() {
-        System.out.println("Starting resume upload process");
-        
-        // Create a hidden file input element using JavaScript
-        String filePath = System.getProperty("user.dir") + "/src/test/resources/testdata/QA_Engineer_Sivaraman M_June.pdf";
-        
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        
-        // Create hidden file input element
-        js.executeScript(
-            "var input = document.createElement('input');" +
-            "input.type = 'file';" +
-            "input.style.display = 'none';" +
-            "input.id = 'hiddenFileInput';" +
-            "document.body.appendChild(input);"
-        );
-        
-        // Set the file path to the hidden input
-        WebElement hiddenInput = driver.findElement(org.openqa.selenium.By.id("hiddenFileInput"));
-        hiddenInput.sendKeys(filePath);
-        
-        // Trigger the upload by simulating the file selection
-        js.executeScript(
-            "var input = document.getElementById('hiddenFileInput');" +
-            "var event = new Event('change', { bubbles: true });" +
-            "input.dispatchEvent(event);"
-        );
-        
-        System.out.println("Resume file upload initiated: " + filePath);
+        try {
+            System.out.println("Starting resume upload using Robot class");
+            
+            // Click the file upload input to open file dialog
+            ElementUtils.click(fileUploadInput);
+            System.out.println("Clicked file upload input");
+            
+            // Wait for file dialog to open
+            Thread.sleep(2000);
+            
+            // File path
+            String filePath = System.getProperty("user.dir") + "\\src\\test\\resources\\testdata\\QA_Engineer_Sivaraman M_June.pdf";
+            
+            // Copy file path to clipboard
+            StringSelection stringSelection = new StringSelection(filePath);
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
+            
+            // Create Robot instance
+            Robot robot = new Robot();
+            
+            // Paste the file path (Ctrl+V)
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+            
+            // Wait a moment
+            Thread.sleep(1000);
+            
+            // Press Enter to confirm file selection
+            robot.keyPress(KeyEvent.VK_ENTER);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+            
+            System.out.println("File upload completed using Robot class");
+            
+        } catch (Exception e) {
+            System.err.println("Error during file upload: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public boolean hasExperience() {
