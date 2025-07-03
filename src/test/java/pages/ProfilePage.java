@@ -32,7 +32,7 @@ public class ProfilePage extends BasePage {
     @FindBy(xpath = "//section[@class='resume-section']")
     private WebElement resumeSection;
 
-    @FindBy(xpath = "//input[@id='attachCV']")
+    @FindBy(xpath = "//input[@value='Update resume']")
     private WebElement fileUploadInput;
 
     @FindBy(xpath = "//input[@value='Update resume']")
@@ -97,7 +97,7 @@ public class ProfilePage extends BasePage {
             System.out.println("Starting resume upload using Robot class");
             
             // Click the file upload input to open file dialog
-            ElementUtils.click(fileUploadInput);
+           ElementUtils.click(fileUploadInput);
             System.out.println("Clicked file upload input");
             
             // Wait for file dialog to open
