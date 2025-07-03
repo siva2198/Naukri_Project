@@ -1,0 +1,47 @@
+# Required Jenkins Plugins for Naukri Automation
+# Install these via Manage Jenkins → Manage Plugins
+
+# Core Pipeline Support
+pipeline-stage-view
+workflow-aggregator
+pipeline-build-step
+
+# Source Code Management
+git
+github
+github-branch-source
+
+# Test Reporting
+allure-jenkins-plugin
+testng-results
+junit
+htmlpublisher
+
+# Build Tools
+maven-plugin
+ant
+
+# Notifications
+email-ext
+slack
+build-timeout
+
+# Utilities
+build-name-setter
+build-user-vars-plugin
+timestamper
+ws-cleanup
+
+# Security
+credentials-binding
+ssh-credentials
+
+# Monitoring
+monitoring
+disk-usage
+
+# Optional but Useful
+blueocean
+dashboard-view
+build-pipeline-plugin
+parameterized-trigger
