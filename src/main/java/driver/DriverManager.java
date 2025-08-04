@@ -61,6 +61,7 @@ public class DriverManager {
     private static WebDriver createChromeDriver() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
+
         options.addArguments("--disable-notifications");
         options.addArguments("--disable-popup-blocking");
         options.addArguments("--disable-dev-shm-usage");
