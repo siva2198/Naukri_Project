@@ -88,7 +88,7 @@ public class ProfilePage extends BasePage {
     public void uploadResumeClickAndUpload() {
 //        ElementUtils.click(uploadResumeButton);
         System.out.println("Clicked upload resume button");
-        ElementUtils.sendKeys(uploadResumeButton,System.getProperty("user.dir")+"/src/test/resources/testdata/QA_Engineer_Sivaraman M_June.pdf");
+        ElementUtils.sendKeys(uploadResumeButton,System.getProperty("user.dir")+"/src/test/resources/testdata/QA_Engineer_Sivaraman M_Aug.pdf");
         System.out.println("File uploaded");
     }
 
