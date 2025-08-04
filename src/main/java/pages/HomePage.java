@@ -37,6 +37,9 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//div[@class='nI-gNb-drawer__icon-img-wrapper']")
     private WebElement userMenu;
 
+    @FindBy(xpath = "//div[@class='nI-gNb-drawer__bars']")
+    private WebElement profileMenuBar;
+
     @FindBy(xpath = "//div[@class='trending-searches']//a")
     private List<WebElement> trendingSearches;
 
@@ -98,6 +101,7 @@ public class HomePage extends BasePage {
         return ElementUtils.isDisplayed(userMenu);
     }
     public void getProfile(){
+        ElementUtils.click(profileMenuBar);
         WebElement viewProfileLink = driver.findElement(
                 By.xpath("//a[contains(text(),'Update Profile')]")
         );
